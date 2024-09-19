@@ -1,9 +1,10 @@
 # Dockerfile for book_catalog microservice
-FROM node:18.17.1
+FROM python:3.11-alpine
 
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install --only=production
-COPY ./src ./src
-COPY ./books ./books
-CMD npm start
+WORKDIR /app/
+
+COPY book_catalog/requirements.txt .
+RUN   pip install --no-cache-dir -r requirements.txt
+
+COPY /book_catalog/ .
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0","--port","8000"]
